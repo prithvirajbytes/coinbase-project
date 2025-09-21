@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { onMessage } from '../services/websocket';
+import React from 'react';
 
-export const SystemStatus = () => {
-  const [channels, setChannels] = useState<any[]>([]);
+interface Props {
+  channels: string[];
+}
 
-  useEffect(() => {
-    onMessage((msg) => {
-      if (msg.type === 'system_status') {
-        setChannels(msg.channels);
-      }
-    });
-  }, []);
-
+const SystemStatus: React.FC<Props> = ({ channels }) => {
   return (
-    <div>
+    <div data-testid="system-status"> {/* Added data-testid here */}
       <h2>System Status</h2>
-      <pre>{JSON.stringify(channels, null, 2)}</pre>
+      <ul>
+        {channels.map((channel, index) => (
+          <li key={index} data-testid={`channel-${index}`}>{channel}</li>
+        ))}
+      </ul>
     </div>
   );
 };
+
+export default SystemStatus;
